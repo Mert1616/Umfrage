@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Survey Position</title>
+    <script>
+        async function getSurveyPosition() {
+            const timestamp = new URLSearchParams(window.location.search).get('timestamp');
+            if (!timestamp) {
+                document.getElementById('position').innerText = "Timestamp bulunamadı!";
+                return;
+            }
+
+            const response = await fetch('https://script.google.com/macros/s/AKfycbz3wSHOnc8uSp0q3STpTaN3_eSi69SdLMCJvUaXic_uUt5dgMZOaKCVa2iMFXEuj4D3FQ/exec', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `timestamp=${timestamp}`
+            });
+            const data = await response.json();
+
+            if (data.position) {
+                document.getElementById('position').innerText = `Sıranız: ${data.position}`;
+            } else {
+                document.getElementById('position').innerText = "Sıranız bulunamadı!";
+            }
+        }
+    </script>
+</head>
+<body onload="getSurveyPosition()">
+    <h1>Teşekkürler!</h1>
+    <p id="position">Sıra numaranız yükleniyor...</p>
+</body>
+</html>
